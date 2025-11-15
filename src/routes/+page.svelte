@@ -46,11 +46,26 @@
         _reps = 0
         registerMode = !registerMode
     }
+
+    const handleFilterAll = async () => {
+        _tasks = [...data.data];
+    }
+
+    const handleFilter = async () => {
+        const filteredTasks = _tasks.filter((task) => {
+            let f;
+            if (task.status !== "completed") {
+                f = task
+            }
+            return f
+        })
+        _tasks = filteredTasks
+    }
 </script>
 
 <div class="container mx-auto">
-    <h1 class="text-center p-2 text-4xl font-bold">習慣化アプリ</h1>
-    <div class="register-area p-2">
+    <h1 class="fixed top-0 left-0 right-0 p-2 text-center text-4xl text-white font-bold bg-blue-500">習慣化アプリ</h1>
+    <div class="register-area pt-20 pb-2 px-2">
     <button onclick={handleRegisterButton} class="bg-blue-500 text-white p-2 rounded-sm hover:bg-blue-600 cursor-pointer">
         {#if registerMode}
             閉じる
@@ -79,6 +94,10 @@
     {/if}
     </div>
     <hr />
+    <div class="filter-area flex p-2">
+        <button class="p-1 m-1 bg-gray-200 rounded-sm cursor-pointer" onclick={handleFilterAll}>全て</button>
+        <button class="p-1 m-1 bg-gray-200 rounded-sm cursor-pointer" onclick={handleFilter}>完了済みを除く</button>
+    </div>
     <ul class="tasks-list p-2">
         {#each _tasks as task}
         <li class="task p-2 m-2">
@@ -88,9 +107,9 @@
             <p class="task-status">
                 ステータス　：
                 {#if task.status === "completed"}
-                    <input type="checkbox" checked/>
+                    <input type="checkbox" class="w-5 h-5 accent-blue-600 cursor-pointer" checked/>
                 {:else}
-                    <input type="checkbox" />
+                    <input type="checkbox" class="w-5 h-5 accent-blue-600 cursor-pointer" />
                 {/if}
             </p>
         </li>
