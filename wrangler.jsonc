@@ -1,0 +1,13 @@
+{
+	"name": "shukan-app",
+	"account_id": "9ca12773d1644211fc2d0076f0fbdf04",
+	"main": "./.cloudflare/worker.js",
+	"assets": {
+		"directory": "./.cloudflare/public",
+		"binding": "ASSETS"
+	},
+	"build": {
+		"command": "npm run build"
+	},
+	"compatibility_date": "2021-11-12"
+}
