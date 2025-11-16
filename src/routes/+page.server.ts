@@ -86,7 +86,6 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
     register: async ({ request }) => {
         const formdata = await request.formData()
-        console.log(formdata.get('task'))
         const { data, error } = await supabase
             .from('tasks')
             .insert([
@@ -98,7 +97,6 @@ export const actions: Actions = {
                 }
             ])
             .select()
-        console.log(data)
         redirect(303, "/")
     }
 } satisfies Actions

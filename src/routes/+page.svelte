@@ -21,7 +21,7 @@
     let _task = $state("");
     let _date = $state("");
     let _reps = $state(0);
-    let _status = $state("")
+    let _activeFilter = $state("all")
 
     onMount(() => {
         _tasks = Array.isArray(data.data) ? [...data.data] : [];
@@ -50,6 +50,7 @@
 
     const handleFilterAll = async () => {
         _tasks = Array.isArray(data.data) ? [...data.data] : [];
+        _activeFilter = "all"
     }
 
     const handleFilter = async () => {
@@ -61,13 +62,25 @@
             return f
         })
         _tasks = filteredTasks
+        _activeFilter = "pending"
+    }
+
+    const handleFilterDate = async () => {
+        const filteredTasks = _tasks.filter((task) => {
+            let f;
+            const today = new Date().toISOString().split('T')[0];
+            if (task.scheduled_date === today) {
+                f = task
+            }
+            return f
+        })
+        _tasks = filteredTasks
+        _activeFilter = "today"
     }
 
     const handleStatusChange = async (value: string, id: number) => {
-        const modTask = _tasks[id - 1]
-        modTask.status = value
-        _tasks[id - 1] = modTask
-        console.log(modTask)
+        const modTask = _tasks.filter((task) => task.id === id)
+        modTask[0].status = value
 
         // supabase更新
         const response = await fetch("/api/tasks", {
@@ -75,9 +88,8 @@
             headers: {
                 'content-type': 'application/json'
             },
-            body: JSON.stringify({ task: modTask })
+            body: JSON.stringify({ task: modTask[0] })
         })
-        console.log(response)
     }
 
 </script>
@@ -115,8 +127,27 @@
     </div>
     <hr />
     <div class="filter-area flex p-2">
-        <button class="p-1 m-1 bg-gray-200 rounded-sm cursor-pointer" onclick={handleFilterAll}>全て</button>
-        <button class="p-1 m-1 bg-gray-200 rounded-sm cursor-pointer" onclick={handleFilter}>完了済みを除く</button>
+        <button
+            class="p-1 m-1 rounded-sm cursor-pointer"
+            onclick={handleFilterAll}
+            class:bg-gray-400={_activeFilter === "all"}
+            class:bg-gray-200={_activeFilter !== "all"}
+            >全て
+        </button>
+        <button
+            class="p-1 m-1 bg-gray-200 rounded-sm cursor-pointer"
+            onclick={handleFilter}
+            class:bg-gray-400={_activeFilter === "pending"}
+            class:bg-gray-200={_activeFilter !== "pending"}
+            >完了済みを除く
+        </button>
+        <button
+            class="p-1 m-1 bg-gray-200 rounded-sm cursor-pointer"
+            onclick={handleFilterDate}
+            class:bg-gray-400={_activeFilter === "today"}
+            class:bg-gray-200={_activeFilter !== "today"}
+            >本日予定
+        </button>
     </div>
     <ul class="tasks-list p-2 m-4 max-h-96 overflow-y-auto bg-white rounded-sm">
         {#each _tasks as task}
