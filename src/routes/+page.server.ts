@@ -77,7 +77,6 @@ const sampleData = [
 
 export const load: PageServerLoad = async () => {
     const { data, error } = await supabase.from('tasks').select('*')
-    console.log(data)
     return {
         data: data
     };
