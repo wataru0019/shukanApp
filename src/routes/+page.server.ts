@@ -1,4 +1,6 @@
 import type { PageServerLoad, Actions } from "./$types";
+import { supabase } from "$lib/supabaseClient"
+import { redirect } from "@sveltejs/kit";
 
 const sampleData = [
     {
@@ -74,15 +76,29 @@ const sampleData = [
   ]
 
 export const load: PageServerLoad = async () => {
+    const { data, error } = await supabase.from('tasks').select('*')
+    console.log(data)
     return {
-        data: sampleData
+        data: data
     };
 };
 
 export const actions: Actions = {
     register: async ({ request }) => {
-        const data = await request.formData()
+        const formdata = await request.formData()
+        console.log(formdata.get('task'))
+        const { data, error } = await supabase
+            .from('tasks')
+            .insert([
+                {
+                    task_name: formdata.get('task'),
+                    scheduled_date: formdata.get('date'),
+                    reps: formdata.get('reps'),
+                    status: "in_progress"
+                }
+            ])
+            .select()
         console.log(data)
-        return
+        redirect(303, "/")
     }
 } satisfies Actions
