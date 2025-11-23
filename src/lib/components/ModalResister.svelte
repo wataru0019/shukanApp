@@ -33,10 +33,10 @@
             class="border border-gray-500 p-2 rounded-sm flex-1"
         />
     </div>
-    <div class="form-control submit p-2">
+    <div class="form-control submit p-2 flex items-center justify-center">
         <button
             type="submit"
-            class="bg-blue-500 text-white p-2 rounded-sm hover:bg-blue-600 cursor-pointer"
+            class="bg-blue-500 text-white py-2 px-6 rounded-sm hover:bg-blue-600 cursor-pointer"
             >送信
         </button>
     </div>

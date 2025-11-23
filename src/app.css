@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+/* Trigger HMR */
 
 @theme {
     --color-primary: #0066cc;

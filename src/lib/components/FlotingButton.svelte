@@ -28,17 +28,19 @@
     <div
         class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
     >
-        <div class="rounded-lg bg-white p-6 shadow-xl">
-            <h2 class="mb-4 text-xl font-bold">Modal Content</h2>
+        <div class="rounded-lg bg-white p-4 shadow-xl">
+            <h2 class="mb-4 text-xl font-bold text-center">タスクの登録</h2>
             <p class="mb-4">
                 <ModalResister />
             </p>
-            <button
-                onclick={() => (isOpen = false)}
-                class="rounded bg-gray-200 px-4 py-2 hover:bg-gray-300 cursor-pointer"
-            >
-                Close
-            </button>
+            <div class="flex justify-end mx-4">
+                <button
+                    onclick={() => (isOpen = false)}
+                    class="rounded bg-gray-200 px-4 py-2 hover:bg-gray-300 cursor-pointer"
+                >
+                    Close
+                </button>
+            </div>
         </div>
     </div>
 {/if}
