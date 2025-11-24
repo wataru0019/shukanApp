@@ -1,36 +1,25 @@
 <script lang="ts">
     import type { PageProps } from "./$types";
+    import type { AggregatedTask } from "$lib/types";
     // データ読み込み
     let { data }: PageProps = $props();
 
-    // データ方定義
-    interface Task {
-        id: number;
-        scheduled_date: string;
-        task_name: string;
-        reps: number;
-        status: string;
-    }
-
     // データの集計処理
-    const aggregatedData = Object.values(
-        data.data.reduce(
+    const aggregatedData: AggregatedTask[] = Object.values(
+        (data.data ?? []).reduce(
             (acc, curr) => {
                 if (!acc[curr.task_name]) {
                     acc[curr.task_name] = {
                         task_name: curr.task_name,
                         total_reps: 0,
-                        dates: [] as string[],
+                        dates: [],
                     };
                 }
                 acc[curr.task_name].total_reps += curr.reps;
                 acc[curr.task_name].dates.push(curr.scheduled_date);
                 return acc;
             },
-            {} as Record<
-                string,
-                { task_name: string; total_reps: number; dates: string[] }
-            >,
+            {} as Record<string, AggregatedTask>,
         ),
     );
 

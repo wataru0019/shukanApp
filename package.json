@@ -24,6 +24,7 @@
 		"wrangler": "^4.47.0"
 	},
 	"dependencies": {
+		"@supabase/ssr": "^0.7.0",
 		"@supabase/supabase-js": "^2.81.1",
 		"@sveltejs/adapter-cloudflare": "^7.2.4"
 	}

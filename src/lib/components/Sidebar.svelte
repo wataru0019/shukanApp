@@ -2,7 +2,7 @@
     import { fly, fade } from "svelte/transition";
     import { page } from "$app/stores";
 
-    let { isOpen = false, onClose } = $props();
+    let { isOpen = false, onClose, onLogout } = $props();
 
     const menuItems = [
         { href: "/", label: "ホーム" },
@@ -75,7 +75,8 @@
 
         <div class="p-4 border-t border-gray-100">
             <button
-                class="w-full px-4 py-2 text-left text-gray-600 hover:text-red-500 transition-colors flex items-center gap-2"
+                onclick={onLogout}
+                class="w-full px-4 py-2 text-left text-gray-600 hover:text-red-500 transition-colors flex items-center gap-2 cursor-pointer"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"

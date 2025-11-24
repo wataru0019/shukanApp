@@ -1,21 +1,13 @@
 <script lang="ts">
     import type { PageProps } from "./$types";
     import { onMount } from "svelte";
+    import type { Task } from "$lib/types";
 
     import FlotingButton from "$lib/components/FlotingButton.svelte";
     import { invalidateAll } from "$app/navigation";
 
     // データ読み込み
     let { data }: PageProps = $props();
-
-    // データ方定義
-    interface Task {
-        id: number;
-        scheduled_date: string;
-        task_name: string;
-        reps: number;
-        status: string;
-    }
 
     // Stateの宣言
     let registerMode = $state(false);
@@ -31,10 +23,6 @@
               )
             : [];
     });
-
-    const handleRegisterButton = async () => {
-        registerMode = !registerMode;
-    };
 
     const handleFilterAll = async () => {
         _tasks = Array.isArray(data.data)

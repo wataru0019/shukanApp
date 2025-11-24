@@ -3,11 +3,35 @@
 	import favicon from "$lib/assets/favicon.svg";
 	import Sidebar from "$lib/components/Sidebar.svelte";
 
-	let { children } = $props();
+	import { invalidate } from "$app/navigation";
+	import { onMount } from "svelte";
+
+	let { data, children } = $props();
+	let { supabase, session } = $derived(data);
+
+	onMount(() => {
+		const { data: authListener } = supabase.auth.onAuthStateChange(
+			(event, newSession) => {
+				if (newSession?.expires_at !== session?.expires_at) {
+					invalidate("supabase:auth");
+				}
+			},
+		);
+
+		return () => {
+			authListener.subscription.unsubscribe();
+		};
+	});
+
 	let isSidebarOpen = $state(false);
 
 	const toggleSidebar = () => {
 		isSidebarOpen = !isSidebarOpen;
+	};
+
+	const handleLogout = async () => {
+		await supabase.auth.signOut();
+		window.location.href = "/auth/login";
 	};
 </script>
 
@@ -32,14 +56,22 @@
 		</h1>
 	</div>
 	<div class="auth-bar flex p-2">
+		<div class="text-white items-center justify-center">
+			{session?.user?.user_metadata.user_name}
+		</div>
 		<button
 			class="items-center justify-center p-2 text-white cursor-pointer hover:bg-blue-600 rounded transition-colors"
+			onclick={handleLogout}
 			>ログアウト
 		</button>
 	</div>
 </header>
 
-<Sidebar isOpen={isSidebarOpen} onClose={() => (isSidebarOpen = false)} />
+<Sidebar
+	isOpen={isSidebarOpen}
+	onClose={() => (isSidebarOpen = false)}
+	onLogout={handleLogout}
+/>
 
 <main class="pt-16">
 	{@render children()}
